@@ -45,7 +45,7 @@ namespace ProcedureOrientedSessionFramework
             if (!IsProcedureExists(msg))
             {
                 var pro = GetProcedure(msg, session);
-                if (pro == null) return false;
+                if (pro == null) { return false; }
                 ProcedureList.Add(pro);
                 Task.Run(pro.RunMain);
             }
