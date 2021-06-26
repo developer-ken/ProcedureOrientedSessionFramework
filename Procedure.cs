@@ -13,29 +13,39 @@ namespace ProcedureOrientedSessionFramework
 {
     public abstract class Procedure : IEquatable<Procedure>, IEquatable<Procedure.Message>
     {
-        public struct Message
+        public struct Message : IEquatable<Message>
         {
             /// <summary>
             /// 消息来源类型
             /// </summary>
-            public SourceType Source;
+            public SourceType Source { get; set; }
             /// <summary>
             /// 如果是好友消息，获取好友的信息
             /// </summary>
-            public IFriendInfo Friend;
+            public IFriendInfo Friend { get; set; }
             /// <summary>
             /// 如果是来自群(私)聊的消息，获取群员信息
             /// </summary>
-            public IGroupMemberInfo GroupMember;
+            public IGroupMemberInfo GroupMember { get; set; }
             /// <summary>
             /// 消息内容
             /// <para>如果消息含有多种内容类型，该值为第一个</para>
             /// </summary>
-            public IMessageBase Content;
+            public IMessageBase Content { get; set; }
             /// <summary>
             /// 消息完整内容
             /// </summary>
-            public IMessageBase[] ContentChain;
+            public IMessageBase[] ContentChain { get; set; }
+
+            public bool Equals(Message other)
+            {
+                return Source.Equals(other.Source) && (other.Source switch
+                {
+                    SourceType.Friend => Friend.Id.Equals(other.Friend.Id),
+                    SourceType.Temp or SourceType.Group => GroupMember.Id.Equals(GroupMember.Id) && GroupMember.Group.Id.Equals(GroupMember.Group.Id),
+                    _ => false,
+                });
+            }
         }
 
         public enum SourceType
@@ -51,7 +61,7 @@ namespace ProcedureOrientedSessionFramework
         /// <summary>
         /// 消息队列
         /// </summary>
-        private Queue<Message> queue;
+        private readonly Queue<Message> queue;
 
         /// <summary>
         /// 会话
@@ -106,7 +116,7 @@ namespace ProcedureOrientedSessionFramework
         /// </summary>
         /// <param name="initmsg">触发流程的消息</param>
         /// <param name="session">Mirai主会话</param>
-        public Procedure(Message initmsg, MiraiHttpSession session)
+        protected Procedure(Message initmsg, MiraiHttpSession session)
         {
             queue = new Queue<Message>();
             this.Session = session;
@@ -167,7 +177,7 @@ namespace ProcedureOrientedSessionFramework
         /// <param name="msg">传入的消息</param>
         public void RECV_MSG(Message msg)
         {
-            if (!IsFinished && IsMyMsg(msg)) queue.Enqueue(msg);
+            if (!IsFinished && IsMyMsg(msg)) { queue.Enqueue(msg); }
         }
 
         /// <summary>
@@ -175,7 +185,7 @@ namespace ProcedureOrientedSessionFramework
         /// </summary>
         private void ThrowFinished()
         {
-            if (IsFinished) throw new InvalidOperationException("Can't handle the procedure when it is aborted.");
+            if (IsFinished) { throw new InvalidOperationException("Can't handle the procedure when it is aborted."); }
         }
 
         /// <summary>
@@ -185,7 +195,7 @@ namespace ProcedureOrientedSessionFramework
         /// <returns></returns>
         protected bool IsMyMsg(Message msg)
         {
-            if (Stype != msg.Source) return false;
+            if (Stype != msg.Source) { return false; }
             switch (Stype)
             {
                 case SourceType.Friend:
@@ -207,10 +217,12 @@ namespace ProcedureOrientedSessionFramework
             ThrowFinished();
             try
             {
-                while (queue.Count < 1)
-                    Thread.Sleep(0);
+                while (queue.Count < 1) { Thread.Sleep(0); }
             }
-            catch { }
+            catch
+            {
+                //Thread sleep might be interrupted.
+            }
             return queue.Dequeue();
         }
 
@@ -245,21 +257,26 @@ namespace ProcedureOrientedSessionFramework
         /// <summary>
         /// 从Bitmap生成图片消息
         /// </summary>
-        /// <param name="pic">Bitmap图片</param>
+        /// <param name="p">Bitmap图片</param>
         /// <returns>图片消息</returns>
-        protected ImageMessage Pic(Bitmap pic)
+        protected ImageMessage Pic(Bitmap p)
         {
             MemoryStream ms = new MemoryStream();
-            pic.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            p.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
             ms.Position = 0;
             ImageMessage msg = Session.UploadPictureAsync((UploadTarget)Stype, ms).Result;
             ms.Close();
             return msg;
         }
 
-        protected PlainMessage Txt(string txt)
+        /// <summary>
+        /// 从字符串生成简单文本信息
+        /// </summary>
+        /// <param name="t">字符串</param>
+        /// <returns>简单文本信息</returns>
+        protected PlainMessage Txt(string t)
         {
-            return new PlainMessage(txt);
+            return new PlainMessage(t);
         }
 
         /// <summary>

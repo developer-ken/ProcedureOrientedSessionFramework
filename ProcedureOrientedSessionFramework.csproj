@@ -8,7 +8,7 @@
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
     <Title>TaskOrientedSessionFramework</Title>
     <Description>To develop mirai bots in a procedure oriented manner.</Description>
-    <Version>1.0.0.1</Version>
+    <Version>1.0.0.2</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/developer-ken/ProcedureOrientedSessionFramework</RepositoryUrl>
   </PropertyGroup>

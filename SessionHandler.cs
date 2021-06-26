@@ -7,9 +7,9 @@ namespace ProcedureOrientedSessionFramework
 {
     public class SessionHandler
     {
-        MiraiHttpSession session;
-        List<Procedure> ProcedureList;
-        Func<Procedure.Message, MiraiHttpSession, Procedure> GetProcedure;
+        private readonly MiraiHttpSession session;
+        private readonly List<Procedure> ProcedureList;
+        private readonly Func<Procedure.Message, MiraiHttpSession, Procedure> GetProcedure;
 
         public SessionHandler(MiraiHttpSession mirai, Func<Procedure.Message, MiraiHttpSession, Procedure> getprocedureobj)
         {
@@ -32,9 +32,9 @@ namespace ProcedureOrientedSessionFramework
                     toremove.Add(p);
                 }
                 else
-                if (p.Equals(msg)) hit = true;
+                if (p.Equals(msg)) { hit = true; }
             }
-            foreach (Procedure p in toremove) ProcedureList.Remove(p);
+            foreach (Procedure p in toremove) { ProcedureList.Remove(p); }
             toremove.Clear();
             return hit;
         }
@@ -71,7 +71,7 @@ namespace ProcedureOrientedSessionFramework
             if (!IsProcedureExists(msg))
             {
                 var pro = GetProcedure(msg, session);
-                if (pro == null) return false;
+                if (pro == null) { return false; }
                 ProcedureList.Add(pro);
                 Task.Run(pro.RunMain);
             }
