@@ -1,5 +1,7 @@
 # ProcedureOrientedSessionFramework
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e96d4275cc7446b69b2e372bdc6cbecc)](https://app.codacy.com/gh/developer-ken/ProcedureOrientedSessionFramework?utm_source=github.com&utm_medium=referral&utm_content=developer-ken/ProcedureOrientedSessionFramework&utm_campaign=Badge_Grade_Settings)
+
 #### 介绍
 面向对象基于会话的Mirai机器人开发框架
 
