@@ -217,7 +217,7 @@ namespace ProcedureOrientedSessionFramework
             ThrowFinished();
             try
             {
-                while (queue.Count < 1) { Thread.Sleep(0); }
+                while (queue.Count < 1) { Task.Delay(1).Wait(); }
             }
             catch
             {
