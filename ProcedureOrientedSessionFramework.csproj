@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <PackageId>ProcedureOrientedSessionFramework</PackageId>
+    <Authors>developer_ken</Authors>
+    <Company>Microstorm</Company>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <Title>TaskOrientedSessionFramework</Title>
+    <Description>To develop mirai bots in a procedure oriented manner.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mirai-CSharp" Version="1.0.2.1" />
+  </ItemGroup>
+
+  
+  
+</Project>

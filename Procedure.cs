@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TaskOrientedSessionFramework
+namespace ProcedureOrientedSessionFramework
 {
     public abstract class Procedure : IEquatable<Procedure>, IEquatable<Procedure.Message>
     {
