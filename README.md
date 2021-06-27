@@ -11,7 +11,7 @@
 
 #### 安装教程
 
-建议(使用Nuget安装)[https://www.nuget.org/packages/ProcedureOrientedSessionFramework]
+建议[使用Nuget安装](https://www.nuget.org/packages/ProcedureOrientedSessionFramework)
 也可以克隆本仓库并创建项目引用
 
 #### 示例代码
